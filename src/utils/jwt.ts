@@ -6,8 +6,8 @@ const createJwtToken = (id: string) => {
      Math.floor(Date.now() / 1000) + 60 * 60 * config?.tokenValidationDays
   return jwt.sign(
      {
-        exp: expireOn,
-        id,
+      exp: expireOn,
+      id,
      },
      config?.jwtSecret!,
   )
