@@ -17,4 +17,24 @@ const getUserByEmail = async (email: string) => {
   })
 }
 
-export { createUser, getUserByEmail }
+const fetchOneUserWithOr = async (payload: Partial<User>) => {
+  return await prisma.user.findFirst({
+    where: {
+      OR: [
+        {
+          email: {
+            endsWith: payload.email,
+            startsWith: payload.email,
+            mode: 'insensitive'
+          }
+        },
+        {
+          id: payload.id
+        }
+      ]
+    }
+  })
+}
+
+
+export { createUser, getUserByEmail, fetchOneUserWithOr}

@@ -2,9 +2,11 @@ import express from 'express'
 const router = express.Router();
 import { prisma } from '../infrastructure/prisma';
 import bcrypt from 'bcryptjs'
+import * as jwt from 'jsonwebtoken'
 
 import { userRepository } from '../user/index'
 
+import { verifyToken } from '../middleware/authMiddleware';
 
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
@@ -33,13 +35,20 @@ router.post('/login', async (req, res) => {
     return res.status(404).send({ message: 'User not found' });
   }
 
+
   const validPassword = await bcrypt.compareSync(password, user.password);
 
   if (!validPassword) {
     return res.status(401).send({ message: 'Invalid password' });
   }
 
-  res.send(user);
+  const token = jwt.sign({ id: user.id }, 'imbinayahehehehe', { expiresIn: '1h' })
+
+  res.status(200).json({ token: 'token', user: user });
 })
+
+router.get('/ping', verifyToken, (req, res) => {
+  res.send({ message: 'pong' });
+});
 
 export { router as authRouter }

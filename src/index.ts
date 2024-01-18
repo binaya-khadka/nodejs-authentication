@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { PORT } from './config'
+import { config } from './infrastructure/config';
 
 import { authRouter } from './routes/auth';
 
@@ -14,6 +14,6 @@ app.get('/', (req: Request, res: Response) => {
 	res.send({ message: 'ping' });
 })
 
-app.listen(PORT, () => {
-	console.log(`Server has started at ${PORT}`)
+app.listen(config?.PORT, () => {
+	console.log(`Server has started at ${config?.PORT}`)
 })

@@ -116,3 +116,10 @@ router.get('/admin', authJwt(), authRole('admin'), async (req, res) => {
   res.send('Admin');
 });
 ```
+
+
+```js
+const token = jwt.sign({ userId: user._id }, 'your-secret-key', {
+        expiresIn: '1h',
+});
+```
