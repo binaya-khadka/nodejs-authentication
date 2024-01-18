@@ -9,6 +9,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   if (!token) return res.status(401).send('Access Denied');
 
   try {
+
     const decodedData: any = jwt.verify(token, config?.jwtSecret);
 
     const checkpayload: any = {
@@ -29,7 +30,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    return res.status(400).send('Invalid Token');
+    return res.status(401).send('Invalid Token');
   }
 
 
