@@ -9,9 +9,11 @@ const App: React.FC = () => {
   return (
     <>
       <div>
-        <p className={'text-red-500 p-2'}>Count: {count}</p>
-        <button onClick={increment}>Increment</button>
-        <button onClick={decrement}>Decrement</button>
+        <p className=''>Count: {count}</p>
+        <div className='flex justify-center space-x-4 mt-4'>
+        <button className='px-4 py-2 bg-indigo-400 rounded-full hover:bg-slate-400' onClick={increment}>Increment</button>
+        <button className='px-4 py-2 bg-indigo-500 rounded-full hover:bg-slate-500' onClick={decrement}>Decrement</button>
+        </div>
       </div>
     </>
   )
