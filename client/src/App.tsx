@@ -1,11 +1,21 @@
-import { pageContainer } from "./preset-styles"
+import React from 'react'
+import './App.css'
+import { useCounter } from './hooks'
 
-export default function App() {
+const App: React.FC = () => {
+
+  const { count, increment, decrement } = useCounter();
+
   return (
     <>
-      <div style={pageContainer}>
-        <div>Ping</div>
+      <div>
+        <p className={'text-red-500 p-2'}>Count: {count}</p>
+        <button onClick={increment}>Increment</button>
+        <button onClick={decrement}>Decrement</button>
       </div>
     </>
   )
 }
+
+export default App;
+
