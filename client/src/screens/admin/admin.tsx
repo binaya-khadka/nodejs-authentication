@@ -10,17 +10,20 @@ const Admin: FC = () => {
 
   useEffect(() => {
     const token = localStorageUtils.getItem('token');
-
-    if (typeof token !== 'undefined') return;
-
-    if (!token) {
-      return navigate('/login')
+   
+    if (typeof token !== 'string') return navigate('/login');
+   
+    const checkToken = async (token: string) => {
+       try {
+         const isValid = await tokenUtils.checkIfTokenIsValid(token);
+         if (!isValid) return navigate('/login');
+       } catch (error) {
+         console.log(error)
+         return 
+       }
     }
-
-    const isTokenValid = tokenUtils.checkIfTokenIsValid(token);
-
-    if (!isTokenValid) return navigate('/login');
-  })
+    checkToken(token);
+   }, [navigate])
 
   return (
     <>

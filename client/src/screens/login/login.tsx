@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Nav } from '../../components';
-import { localStorageUtils } from '../../utils';
+import { localStorageUtils, tokenUtils } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios'
@@ -42,11 +42,22 @@ const Login: FC = () => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorageUtils.getItem('token');
+
     if (typeof token !== 'string') return;
-    
-    return navigate('/admin')
-  })
+
+    const checkToken = async (token: string) => {
+      try {
+        const isValid = await tokenUtils.checkIfTokenIsValid(token);
+        //  if (!isValid) return navigate('/login');
+        if (isValid) return navigate('/admin')
+      } catch (error) {
+        console.log(error)
+        return
+      }
+    }
+    checkToken(token);
+  }, [navigate])
 
   return (
     <>
