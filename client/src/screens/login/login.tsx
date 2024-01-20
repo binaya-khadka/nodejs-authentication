@@ -33,6 +33,9 @@ const Login: FC = () => {
 
       localStorageUtils.setItem('token', incomingData?.token);
       localStorageUtils.setItem('user', JSON.stringify(incomingData?.user));
+
+      navigate('/admin');
+
     } catch (error) {
       console.log(error);
     }

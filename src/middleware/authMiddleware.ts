@@ -23,6 +23,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
         status: {
           code: 401,
           success: false,
+          isValid: false,
         },
         message: 'User not found'
       }
@@ -30,7 +31,14 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    return res.status(401).send('Invalid Token');
+    throw {
+      status: {
+        code: 501,
+        success: false,
+        isValid: false,
+      }
+    }
+    // return res.status(401).send({message: 'Something went wrong'});
   }
 
 

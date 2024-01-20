@@ -2,16 +2,16 @@ import { FC } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Nav } from '../../components';
 
-interface AluType {
+interface SignupType {
   name: string;
   email: string;
   password: string;
 }
 
 const Signup: FC = () => {
-  const { control, handleSubmit } = useForm<AluType>()
+  const { control, handleSubmit } = useForm<SignupType>()
 
-  const onSubmit = (data: AluType) => {
+  const onSubmit = (data: SignupType) => {
     console.log(data)
   }
 

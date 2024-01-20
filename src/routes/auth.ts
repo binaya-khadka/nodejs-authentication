@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 const router = express.Router();
 import bcrypt from 'bcryptjs'
 import { jwtUtils } from '../utils';
 import { userRepository } from '../user/index'
 import { verifyToken } from '../middleware/authMiddleware';
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   const salt = await bcrypt.genSalt(10);
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
 
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const user = await userRepository.getUserByEmail(email);
@@ -44,8 +44,9 @@ router.post('/login', async (req, res) => {
   res.status(200).json({ token: token, user: user });
 })
 
-router.get('/ping', verifyToken, (req, res) => {
-  res.send({ message: 'pong' });
-});
+//  check token
+router.get('/validate-token', verifyToken, (req: Request, res: Response) => {
+  res.json({ isValid: true, success: true, message: 'Token is valid' });
+})
 
 export { router as authRouter }
