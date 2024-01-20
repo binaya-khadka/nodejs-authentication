@@ -1,7 +1,7 @@
 
 const checkIfTokenIsValid = async (token: string): Promise<boolean> => {
   try {
-    const response = await fetch('http://localhost:8000/auth/token-check', {
+    const response = await fetch('http://localhost:8000/auth/validate-token', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -15,9 +15,10 @@ const checkIfTokenIsValid = async (token: string): Promise<boolean> => {
 
     const data = await response.json();
 
-    if (data?.isValid) {
+    if (!data?.isValid) {
       return false;
     }
+
     return true;
   } catch (error) {
     console.log(error)
