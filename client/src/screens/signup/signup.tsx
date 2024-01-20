@@ -1,19 +1,59 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Nav } from '../../components';
+import { useNavigate } from 'react-router-dom';
+import { localStorageUtils, tokenUtils } from '../../utils';
+import axios from 'axios';
 
 interface SignupType {
   name: string;
   email: string;
   password: string;
 }
+interface IncomingData {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  }
+}
 
 const Signup: FC = () => {
   const { control, handleSubmit } = useForm<SignupType>()
+  const navigate = useNavigate();
 
-  const onSubmit = (data: SignupType) => {
-    console.log(data)
+  const onSubmit = async (data: SignupType) => {
+    try {
+      const response = await axios.post('http://localhost:8000/auth/register', data);
+      const incomingData: IncomingData = response?.data;
+
+      localStorageUtils.setItem('token', incomingData?.token);
+      localStorageUtils.setItem('user', JSON.stringify(incomingData?.user));
+
+      navigate('/login');
+
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  useEffect(() => {
+    const token = localStorageUtils.getItem('token');
+
+    if (typeof token !== 'string') return;
+
+    const checkToken = async (token: string) => {
+      try {
+        const isValid = await tokenUtils.checkIfTokenIsValid(token);
+        if (isValid) return navigate('/admin')
+      } catch (error) {
+        console.log(error)
+        return
+      }
+    }
+    checkToken(token);
+  }, [navigate])
 
   return (
     <>
