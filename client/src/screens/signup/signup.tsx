@@ -41,7 +41,7 @@ const Signup: FC = () => {
   useEffect(() => {
     const token = localStorageUtils.getItem('token');
 
-    if (typeof token !== 'string') return;
+    if (typeof token !== 'string') return navigate('/signup');
 
     const checkToken = async (token: string) => {
       try {
