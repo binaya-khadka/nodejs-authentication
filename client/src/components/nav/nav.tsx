@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { localStorageUtils, tokenUtils } from "../../utils";
 
 export const Nav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -6,6 +8,32 @@ export const Nav = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen)
   }
+
+  const logout = () => {
+    localStorageUtils.clear();
+    navigate('/login')
+  }
+
+  const [showLink, setShowLink] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorageUtils.getItem('token');
+    if (typeof token !== 'string') return navigate('/login');
+
+    const checkToken = async (token: string) => {
+      try {
+        const isValid = await tokenUtils.checkIfTokenIsValid(token);
+        if (isValid) return setShowLink(false);
+      } catch (error) {
+        console.log(error)
+        return
+      }
+    }
+
+    checkToken(token);
+  }, [navigate])
 
   return (
     <>
@@ -17,8 +45,17 @@ export const Nav = () => {
 
           <div className="hidden md:flex space-x-4">
             <a href="/" className="text-white hover:text-gray-300">Home</a>
-            <a href="/login" className="text-white hover:text-gray-300">Login</a>
-            <a href="/signup" className="text-white hover:text-gray-300">Signup</a>
+            {showLink && showLink ? (
+              <>
+                <a href="/login" className="text-white hover:text-gray-300">Login</a>
+                <a href="/signup" className="text-white hover:text-gray-300">Signup</a>
+              </>
+            ) : (
+              <>
+                <a href="/admin" className="text-white hover:text-gray-300">Admin</a>
+                <div onClick={logout} className="text-white hover:text-gray-300 cursor-pointer">Logout</div>
+              </>
+            )}
           </div>
 
           <div className="md:hidden">
